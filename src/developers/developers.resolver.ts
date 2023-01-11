@@ -1,8 +1,6 @@
 import { Float, Query, Resolver, Mutation, Args } from '@nestjs/graphql';
-import { QueryDocumentKeys } from 'graphql/language/ast';
-import { GetDeveloperDto } from './dto/developers.dto';
+import { GetDeveloperDto, GetOneDeveloperInput } from './dto/developers.dto';
 import { DevelopersService } from './developers.service';
-import { Developer } from './entities/developers.entity';
 
 @Resolver()
 export class DevelopersResolver {
@@ -16,8 +14,13 @@ export class DevelopersResolver {
     return 'Hola developer';
   }
 
-  @Query(() => [Developer])
+  @Query(() => [GetDeveloperDto])
   async GetAllDevelopers() {
     return this.developersService.findAll();
+  }
+
+  @Query(() => GetDeveloperDto)
+  async GetDeveloperById(@Args('input') input: GetOneDeveloperInput) {
+    return this.developersService.findOne(input.id);
   }
 }

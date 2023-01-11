@@ -6,7 +6,7 @@ import {
   IsPositive,
 } from 'class-validator';
 import { PartialType, ApiProperty } from '@nestjs/swagger';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class GetDeveloperDto {
@@ -28,6 +28,16 @@ export class GetDeveloperDto {
   @ApiProperty({ description: 'the email of developer' })
   @Field()
   readonly email: string;
+}
+
+@InputType()
+export class GetOneDeveloperInput {
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  @ApiProperty()
+  @Field()
+  readonly id: number;
 }
 
 export class CreateDeveloperDto {

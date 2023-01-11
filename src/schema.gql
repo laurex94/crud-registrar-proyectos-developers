@@ -2,7 +2,7 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Developer {
+type GetDeveloperDto {
   id: Float!
   name: String!
   email: String!
@@ -11,5 +11,10 @@ type Developer {
 type Query {
   """Hola developer, es lo que retorna"""
   hola_developer: String!
-  GetAllDevelopers: [Developer!]!
+  GetAllDevelopers: [GetDeveloperDto!]!
+  GetDeveloperById(input: GetOneDeveloperInput!): GetDeveloperDto!
+}
+
+input GetOneDeveloperInput {
+  id: Float!
 }
