@@ -5,4 +5,5 @@
 type Query {
   """Hola developer, es lo que retorna"""
   hola_developer: String!
+  ramdonNumber: Float!
 }

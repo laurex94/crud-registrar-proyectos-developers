@@ -1,4 +1,5 @@
-import { Query, Resolver } from '@nestjs/graphql';
+import { Float, Query, Resolver, Mutation, Args } from '@nestjs/graphql';
+import { QueryDocumentKeys } from 'graphql/language/ast';
 
 @Resolver()
 export class DevelopersResolver {
@@ -8,5 +9,10 @@ export class DevelopersResolver {
   })
   helloDeveloper(): string {
     return 'Hola developer';
+  }
+
+  @Query(() => Float, { name: 'ramdonNumber' })
+  getRamdonNumber(): number {
+    return Math.random() * 100;
   }
 }
