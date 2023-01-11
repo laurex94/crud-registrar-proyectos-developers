@@ -1,5 +1,3 @@
-import { Developer } from '../../developers/entities/developers.entity';
-
 export enum statusProject {
   available = 'available',
   progress = 'progress',

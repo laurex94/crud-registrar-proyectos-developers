@@ -1,10 +1,12 @@
-import { Speciality } from 'src/specialities/entities/specialities.entity';
-import { Project } from '../../projects/entities/projects.entity';
+import { Field, ObjectType } from '@nestjs/graphql';
 
+@ObjectType()
 export class Developer {
   id: number;
+
+  @Field()
   name: string;
+
+  @Field()
   email: string;
-  projects: Project[];
-  roles: Speciality[];
 }
