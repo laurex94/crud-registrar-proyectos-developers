@@ -4,7 +4,6 @@ import {
   IsEmail,
   IsNumber,
   IsPositive,
-  IsBoolean,
 } from 'class-validator';
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 

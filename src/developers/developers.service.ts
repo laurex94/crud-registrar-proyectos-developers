@@ -1,11 +1,10 @@
-import { Injectable, NotFoundException, Inject } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Developer } from './entities/developers.entity';
 
 import {
   CreateDeveloperInput,
   UpdateDeveloperInput,
 } from './dto/developers.dto';
-import { statusProject } from 'src/projects/entities/projects.entity';
 
 @Injectable()
 export class DevelopersService {

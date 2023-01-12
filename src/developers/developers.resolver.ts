@@ -1,4 +1,4 @@
-import { Float, Query, Resolver, Mutation, Args } from '@nestjs/graphql';
+import { Query, Resolver, Mutation, Args } from '@nestjs/graphql';
 import {
   GetDeveloperDto,
   GetOneDeveloperInput,
