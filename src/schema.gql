@@ -15,6 +15,11 @@ type GetDeveloperDto {
   email: String!
 }
 
+type SpecialitiesDto {
+  id: Float!
+  name: String!
+}
+
 type Query {
   getAllProjects: [GetProjectDto!]!
   getProjectById(input: GetOneProjectInput!): GetProjectDto!
@@ -23,6 +28,8 @@ type Query {
   hola_developer: String!
   getAllDevelopers: [GetDeveloperDto!]!
   getDeveloperById(input: GetOneDeveloperInput!): GetDeveloperDto!
+  getAllSpecialites: [SpecialitiesDto!]!
+  getSpecialityById(input: GetOneSpecialityInput!): SpecialitiesDto!
 }
 
 input GetOneProjectInput {
@@ -33,13 +40,18 @@ input GetOneDeveloperInput {
   id: Float!
 }
 
+input GetOneSpecialityInput {
+  id: Float!
+}
+
 type Mutation {
   createProject(input: CreateProjectInput!): GetProjectDto!
-  updateProject(input: UpdateProjectInput!): GetProjectDto!
-  DeleteProject(input: DeleteProjectInput!): GetProjectDto!
+  updateProject(input: UpdateSpecialityInput!): SpecialitiesDto!
+  DeleteProject(input: DeleteSpecialityInput!): SpecialitiesDto!
   createDeveloper(input: CreateDeveloperInput!): GetDeveloperDto!
   updateDeveloper(input: UpdateDeveloperInput!): GetDeveloperDto!
   DeleteDeveloper(input: DeleteDeveloperInput!): GetDeveloperDto!
+  createSpeciality(input: CreateSpecialityInput!): SpecialitiesDto!
 }
 
 input CreateProjectInput {
@@ -48,14 +60,12 @@ input CreateProjectInput {
   status: String!
 }
 
-input UpdateProjectInput {
+input UpdateSpecialityInput {
   id: Float!
   name: String!
-  description: String!
-  status: String!
 }
 
-input DeleteProjectInput {
+input DeleteSpecialityInput {
   id: Float!
 }
 
@@ -72,4 +82,8 @@ input UpdateDeveloperInput {
 
 input DeleteDeveloperInput {
   id: Float!
+}
+
+input CreateSpecialityInput {
+  name: String!
 }
