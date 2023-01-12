@@ -2,6 +2,13 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type GetProjectDto {
+  id: Float!
+  name: String!
+  description: String!
+  status: String!
+}
+
 type GetDeveloperDto {
   id: Float!
   name: String!
@@ -9,10 +16,17 @@ type GetDeveloperDto {
 }
 
 type Query {
+  getAllProjects: [GetProjectDto!]!
+  getProjectById(input: GetOneProjectInput!): GetProjectDto!
+
   """Hola developer, es lo que retorna"""
   hola_developer: String!
   getAllDevelopers: [GetDeveloperDto!]!
   getDeveloperById(input: GetOneDeveloperInput!): GetDeveloperDto!
+}
+
+input GetOneProjectInput {
+  id: Float!
 }
 
 input GetOneDeveloperInput {
@@ -20,9 +34,29 @@ input GetOneDeveloperInput {
 }
 
 type Mutation {
+  createProject(input: CreateProjectInput!): GetProjectDto!
+  updateProject(input: UpdateProjectInput!): GetProjectDto!
+  DeleteProject(input: DeleteProjectInput!): GetProjectDto!
   createDeveloper(input: CreateDeveloperInput!): GetDeveloperDto!
   updateDeveloper(input: UpdateDeveloperInput!): GetDeveloperDto!
   DeleteDeveloper(input: DeleteDeveloperInput!): GetDeveloperDto!
+}
+
+input CreateProjectInput {
+  name: String!
+  description: String!
+  status: String!
+}
+
+input UpdateProjectInput {
+  id: Float!
+  name: String!
+  description: String!
+  status: String!
+}
+
+input DeleteProjectInput {
+  id: Float!
 }
 
 input CreateDeveloperInput {
