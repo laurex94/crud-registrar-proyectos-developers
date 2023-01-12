@@ -3,6 +3,7 @@ import { SpecialitiesResolver } from './specialities.resolver';
 import { SpecialitiesService } from './specialities.service';
 
 @Module({
-  providers: [SpecialitiesResolver, SpecialitiesService]
+  providers: [SpecialitiesResolver, SpecialitiesService],
+  exports: [SpecialitiesService],
 })
 export class SpecialitiesModule {}
