@@ -4,54 +4,73 @@ import {
   IsEmail,
   IsNumber,
   IsPositive,
+  IsBoolean,
 } from 'class-validator';
-import { PartialType, ApiProperty } from '@nestjs/swagger';
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class GetDeveloperDto {
+  @Field()
   @IsNumber()
   @IsPositive()
-  @IsNotEmpty()
-  @ApiProperty()
-  @Field()
   readonly id: number;
 
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
   @Field()
+  @IsString()
   readonly name: string;
 
+  @Field()
   @IsString()
   @IsEmail()
-  @ApiProperty({ description: 'the email of developer' })
-  @Field()
   readonly email: string;
 }
 
 @InputType()
 export class GetOneDeveloperInput {
+  @Field()
   @IsNumber()
   @IsPositive()
   @IsNotEmpty()
-  @ApiProperty()
-  @Field()
   readonly id: number;
 }
 
-export class CreateDeveloperDto {
+@InputType()
+export class CreateDeveloperInput {
+  @Field()
   @IsString()
   @IsNotEmpty()
-  @ApiProperty()
-  @Field()
   readonly name: string;
 
+  @Field()
   @IsString()
   @IsEmail()
-  @ApiProperty({ description: 'the email of developer' })
-  @Field()
   readonly email: string;
 }
 
-export class UpdateDeveloperDto extends PartialType(CreateDeveloperDto) {}
+@InputType()
+export class UpdateDeveloperInput {
+  @Field()
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  readonly id: number;
+
+  @Field()
+  @IsString()
+  @IsNotEmpty()
+  readonly name: string;
+
+  @Field()
+  @IsString()
+  @IsEmail()
+  readonly email: string;
+}
+
+@InputType()
+export class DeleteDeveloperInput {
+  @Field()
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  readonly id: number;
+}

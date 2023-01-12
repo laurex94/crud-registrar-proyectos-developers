@@ -2,9 +2,8 @@ import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { Developer } from './entities/developers.entity';
 
 import {
-  CreateDeveloperDto,
-  GetDeveloperDto,
-  UpdateDeveloperDto,
+  CreateDeveloperInput,
+  UpdateDeveloperInput,
 } from './dto/developers.dto';
 import { statusProject } from 'src/projects/entities/projects.entity';
 
@@ -28,14 +27,14 @@ export class DevelopersService {
   }
 
   findOne(id: number) {
-    const developer = this.developers.find((item) => item.id === id);
+    const developer = this.developers.find((data) => data.id === id);
     if (!developer) {
       throw new NotFoundException(`Developer #${id} not found`);
     }
     return developer;
   }
 
-  create(data: CreateDeveloperDto) {
+  create(data: CreateDeveloperInput) {
     this.counterId = this.counterId + 1;
     const newUser = {
       id: this.counterId,
@@ -43,5 +42,25 @@ export class DevelopersService {
     };
     this.developers.push(newUser);
     return newUser;
+  }
+
+  update(changes: UpdateDeveloperInput) {
+    const developer = this.findOne(changes.id);
+    const index = this.developers.findIndex((data) => data.id === changes.id);
+    this.developers[index] = {
+      ...developer,
+      ...changes,
+    };
+    return this.developers[index];
+  }
+
+  remove(id: number) {
+    const developer = this.findOne(id);
+    const index = this.developers.findIndex((data) => data.id === id);
+    if (index === -1) {
+      throw new NotFoundException(`Developer #${id} not found`);
+    }
+    this.developers.splice(index, 1);
+    return developer;
   }
 }
