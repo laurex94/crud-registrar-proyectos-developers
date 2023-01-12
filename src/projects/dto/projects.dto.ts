@@ -1,10 +1,4 @@
-import {
-  IsString,
-  IsNotEmpty,
-  IsEmail,
-  IsNumber,
-  IsPositive,
-} from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { statusProject } from '../entities/projects.entity';
 
