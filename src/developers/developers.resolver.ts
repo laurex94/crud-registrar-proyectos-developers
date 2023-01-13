@@ -6,6 +6,7 @@ import {
   UpdateDeveloperInput,
   AddDeveloperSpecialityOutput,
   AddDeveloperSpecialityInput,
+  findDevsByProjectIdOutput,
 } from './dto/developers.dto';
 import { DevelopersService } from './developers.service';
 
@@ -46,5 +47,10 @@ export class DevelopersResolver {
     @Args('input') input: AddDeveloperSpecialityInput,
   ) {
     return await this.developersService.AddDeveloperSpeciality(input);
+  }
+
+  @Query(() => [findDevsByProjectIdOutput])
+  async findDevsByProjectId(@Args('input') input: GetOneDeveloperInput) {
+    return await this.developersService.findDevsByProjectId(input.id);
   }
 }

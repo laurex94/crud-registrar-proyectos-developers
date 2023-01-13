@@ -21,6 +21,13 @@ type AddDeveloperSpecialityOutput {
   speciality: String!
 }
 
+type findDevsByProjectIdOutput {
+  developer: String!
+  email: String!
+  speciality: String!
+  project_associated: String!
+}
+
 type GetSpecialityDto {
   id: Float!
   name: String!
@@ -34,6 +41,7 @@ type Query {
   hola_developer: String!
   getAllDevelopers: [GetDeveloperDto!]!
   getDeveloperById(input: GetOneDeveloperInput!): GetDeveloperDto!
+  findDevsByProjectId(input: GetOneDeveloperInput!): [findDevsByProjectIdOutput!]!
   getAllSpecialites: [GetSpecialityDto!]!
   getSpecialityById(input: GetOneSpecialityInput!): GetSpecialityDto!
 }
