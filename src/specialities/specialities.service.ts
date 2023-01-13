@@ -1,13 +1,21 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Speciality, listRoles } from './entities/specialities.entity';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
+import { Knex } from 'knex';
+import { InjectConnection } from 'nest-knexjs';
 
+import { Speciality, listRoles } from './entities/specialities.entity';
 import {
   CreateSpecialityInput,
   UpdateSpecialityInput,
 } from './dto/specialities.dto';
+import { Console } from 'console';
 
 @Injectable()
 export class SpecialitiesService {
+  constructor(@InjectConnection() private readonly knex: Knex) {}
   private counterId = 1;
   private roles: Speciality[] = [
     {
@@ -17,48 +25,71 @@ export class SpecialitiesService {
   ];
 
   async findAll() {
-    const roles = this.roles;
-    if (!roles) {
-      throw new NotFoundException(`Speciality not found`);
+    const specialities = await this.knex.table('specialities');
+    console.log(specialities);
+    if (!specialities) {
+      throw new NotFoundException(`specialities not found`);
     }
-    return roles;
+    return specialities;
   }
 
   async findOne(id: number) {
-    const rol = this.roles.find((data) => data.id === id);
-    if (!rol) {
-      throw new NotFoundException(`Speciality #${id} not found`);
+    const query = `SELECT * from specialities where id = ?`;
+    const speciality = await this.knex.raw(query, [id]);
+    console.log(speciality.rows[0]);
+    if (!speciality || speciality.rows[0] === undefined) {
+      throw new NotFoundException(`Speciality with id ${id} not found`);
     }
-    return rol;
+    return speciality.rows[0];
   }
 
   async create(data: CreateSpecialityInput) {
-    this.counterId = this.counterId + 1;
-    const newRol = {
-      id: this.counterId,
-      ...data,
-    };
-    this.roles.push(newRol);
-    return newRol;
+    const { name } = data;
+    const insert = await this.knex('specialities')
+      .insert({
+        name,
+      })
+      .returning('id')
+      .then((report) => {
+        return this.findOne(+report[0].id);
+      })
+      .catch((err) => {
+        console.log('Error registering Speciality', err);
+        throw new BadRequestException(
+          `Error registering Speciality: ${err.detail}`,
+        );
+      });
+
+    return insert;
   }
 
   async update(changes: UpdateSpecialityInput) {
-    const rol = this.findOne(changes.id);
-    const index = this.roles.findIndex((data) => data.id === changes.id);
-    this.roles[index] = {
-      ...rol,
+    const querySpec = `SELECT * FROM specialities WHERE id = ?`;
+    const dataSpec = await this.knex.raw(querySpec, [changes.id]);
+    const actualDataSpec = dataSpec.rows[0];
+    if (actualDataSpec === undefined) {
+      throw new NotFoundException(`Speciality with id ${changes.id} not found`);
+    }
+
+    const newDataSpec = {
+      ...actualDataSpec,
       ...changes,
     };
-    return this.roles[index];
-  }
 
-  async remove(id: number) {
-    const rol = this.findOne(id);
-    const index = this.roles.findIndex((data) => data.id === id);
-    if (index === -1) {
-      throw new NotFoundException(`Speciality #${id} not found`);
-    }
-    this.roles.splice(index, 1);
-    return rol;
+    const query = `UPDATE public.specialities SET name=? WHERE id = ?`;
+
+    await this.knex
+      .raw(query, [newDataSpec.name, newDataSpec.id])
+      .then(async (report) => {
+        console.log(report);
+      })
+      .catch((err) => {
+        console.log('Error updating Speciality', err);
+        throw new BadRequestException(
+          `Error updating Speciality: ${err.detail}`,
+        );
+      });
+
+    return newDataSpec;
   }
 }

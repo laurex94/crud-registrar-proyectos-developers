@@ -4,6 +4,7 @@ import {
   IsEmail,
   IsNumber,
   IsPositive,
+  IsOptional,
 } from 'class-validator';
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 
@@ -51,25 +52,15 @@ export class UpdateDeveloperInput {
   @Field()
   @IsNumber()
   @IsPositive()
-  @IsNotEmpty()
   readonly id: number;
 
-  @Field()
+  @Field({ nullable: true })
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   readonly name: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsString()
-  @IsEmail()
+  @IsOptional()
   readonly email: string;
-}
-
-@InputType()
-export class DeleteDeveloperInput {
-  @Field()
-  @IsNumber()
-  @IsPositive()
-  @IsNotEmpty()
-  readonly id: number;
 }

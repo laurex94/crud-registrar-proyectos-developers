@@ -1,10 +1,9 @@
 import { Query, Resolver, Mutation, Args } from '@nestjs/graphql';
 import {
-  SpecialitiesDto,
+  GetSpecialityDto,
   GetOneSpecialityInput,
   CreateSpecialityInput,
   UpdateSpecialityInput,
-  DeleteSpecialityInput,
 } from './dto/specialities.dto';
 import { SpecialitiesService } from './specialities.service';
 
@@ -12,28 +11,23 @@ import { SpecialitiesService } from './specialities.service';
 export class SpecialitiesResolver {
   constructor(private specialitiesService: SpecialitiesService) {}
 
-  @Query(() => [SpecialitiesDto])
+  @Query(() => [GetSpecialityDto])
   async getAllSpecialites() {
     return this.specialitiesService.findAll();
   }
 
-  @Query(() => SpecialitiesDto)
+  @Query(() => GetSpecialityDto)
   async getSpecialityById(@Args('input') input: GetOneSpecialityInput) {
-    return this.specialitiesService.findOne(input.id);
+    return await this.specialitiesService.findOne(input.id);
   }
 
-  @Mutation(() => SpecialitiesDto)
+  @Mutation(() => GetSpecialityDto)
   async createSpeciality(@Args('input') input: CreateSpecialityInput) {
-    return this.specialitiesService.create(input);
+    return await this.specialitiesService.create(input);
   }
 
-  @Mutation(() => SpecialitiesDto)
-  async updateProject(@Args('input') input: UpdateSpecialityInput) {
-    return this.specialitiesService.update(input);
-  }
-
-  @Mutation(() => SpecialitiesDto)
-  async DeleteProject(@Args('input') input: DeleteSpecialityInput) {
-    return this.specialitiesService.remove(input.id);
+  @Mutation(() => GetSpecialityDto)
+  async updateSpeciality(@Args('input') input: UpdateSpecialityInput) {
+    return await this.specialitiesService.update(input);
   }
 }

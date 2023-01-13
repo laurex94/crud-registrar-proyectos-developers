@@ -1,9 +1,14 @@
-import { IsString, IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsPositive,
+  IsOptional,
+} from 'class-validator';
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { listRoles } from '../entities/specialities.entity';
 
 @ObjectType()
-export class SpecialitiesDto {
+export class GetSpecialityDto {
   @Field()
   @IsNumber()
   @IsPositive()
@@ -28,7 +33,7 @@ export class CreateSpecialityInput {
   @Field()
   @IsString()
   @IsNotEmpty()
-  readonly name: listRoles;
+  readonly name: string;
 }
 
 @InputType()
@@ -36,19 +41,10 @@ export class UpdateSpecialityInput {
   @Field()
   @IsNumber()
   @IsPositive()
-  @IsNotEmpty()
   readonly id: number;
 
-  @Field()
+  @Field({ nullable: true })
   @IsString()
-  readonly name: listRoles;
-}
-
-@InputType()
-export class DeleteSpecialityInput {
-  @Field()
-  @IsNumber()
-  @IsPositive()
-  @IsNotEmpty()
-  readonly id: number;
+  @IsOptional()
+  readonly name: string;
 }

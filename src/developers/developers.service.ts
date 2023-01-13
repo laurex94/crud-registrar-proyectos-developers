@@ -3,7 +3,6 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { Developer } from './entities/developers.entity';
 import { Knex } from 'knex';
 import { InjectConnection } from 'nest-knexjs';
 
@@ -28,7 +27,7 @@ export class DevelopersService {
     const query = `SELECT * from developers where id = ?`;
     const developer = await this.knex.raw(query, [id]);
     console.log(developer.rows[0]);
-    if (!developer) {
+    if (!developer || developer.rows[0] === undefined) {
       throw new NotFoundException(`Developer with id ${id} not found`);
     }
     return developer.rows[0];
@@ -73,7 +72,7 @@ export class DevelopersService {
     await this.knex
       .raw(query, [newDataRcords.name, newDataRcords.email, newDataRcords.id])
       .then((report) => {
-        return this.findOne(newDataRcords.id);
+        console.log(report);
       })
       .catch((err) => {
         console.log('Error updating Developer', err);
@@ -81,5 +80,7 @@ export class DevelopersService {
           `Error updating Developer: ${err.detail}`,
         );
       });
+
+    return newDataRcords;
   }
 }

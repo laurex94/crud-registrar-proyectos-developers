@@ -4,7 +4,6 @@ import {
   GetOneDeveloperInput,
   CreateDeveloperInput,
   UpdateDeveloperInput,
-  DeleteDeveloperInput,
 } from './dto/developers.dto';
 import { DevelopersService } from './developers.service';
 
@@ -27,16 +26,16 @@ export class DevelopersResolver {
 
   @Query(() => GetDeveloperDto)
   async getDeveloperById(@Args('input') input: GetOneDeveloperInput) {
-    return this.developersService.findOne(input.id);
+    return await this.developersService.findOne(input.id);
   }
 
   @Mutation(() => GetDeveloperDto)
   async createDeveloper(@Args('input') input: CreateDeveloperInput) {
-    return this.developersService.create(input);
+    return await this.developersService.create(input);
   }
 
   @Mutation(() => GetDeveloperDto)
   async updateDeveloper(@Args('input') input: UpdateDeveloperInput) {
-    return this.developersService.update(input);
+    return await this.developersService.update(input);
   }
 }
