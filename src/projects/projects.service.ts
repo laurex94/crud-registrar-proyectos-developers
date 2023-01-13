@@ -71,23 +71,38 @@ export class ProjectsService {
     return insert;
   }
 
-  // async update(changes: UpdateProjectInput) {
-  //   const project = this.findOne(changes.id);
-  //   const index = this.projects.findIndex((data) => data.id === changes.id);
-  //   this.projects[index] = {
-  //     ...project,
-  //     ...changes,
-  //   };
-  //   return this.projects[index];
-  // }
+  async update(changes: UpdateProjectInput) {
+    const queryProj = `SELECT * FROM projects WHERE id = ?`;
+    const dataProj = await this.knex.raw(queryProj, [changes.id]);
+    const actualDataProj = dataProj.rows[0];
+    if (actualDataProj === undefined) {
+      throw new NotFoundException(`Speciality with id ${changes.id} not found`);
+    }
 
-  // async remove(id: number) {
-  //   const project = this.findOne(id);
-  //   const index = this.projects.findIndex((data) => data.id === id);
-  //   if (index === -1) {
-  //     throw new NotFoundException(`Developer #${id} not found`);
-  //   }
-  //   this.projects.splice(index, 1);
-  //   return project;
-  // }
+    const newDataProj = {
+      ...actualDataProj,
+      ...changes,
+    };
+
+    const query = `UPDATE public.projects SET name=?, description = ?, id_status = ? WHERE id = ?`;
+
+    await this.knex
+      .raw(query, [
+        newDataProj.name,
+        newDataProj.description,
+        newDataProj.id_status,
+        newDataProj.id,
+      ])
+      .then(async (report) => {
+        console.log(report);
+      })
+      .catch((err) => {
+        console.log('Error updating Speciality', err);
+        throw new BadRequestException(
+          `Error updating Speciality: ${err.detail}`,
+        );
+      });
+
+    return newDataProj;
+  }
 }

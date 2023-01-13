@@ -1,4 +1,10 @@
-import { IsString, IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsPositive,
+  IsOptional,
+} from 'class-validator';
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
@@ -52,18 +58,20 @@ export class UpdateProjectInput {
   @Field()
   @IsNumber()
   @IsPositive()
-  @IsNotEmpty()
   readonly id: number;
 
   @Field({ nullable: true })
   @IsString()
+  @IsOptional()
   readonly name: string;
 
   @Field({ nullable: true })
   @IsString()
+  @IsOptional()
   readonly description: string;
 
   @Field({ nullable: true })
   @IsString()
-  readonly idStatus: number;
+  @IsOptional()
+  readonly id_status: number;
 }

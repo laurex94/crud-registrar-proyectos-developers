@@ -3,8 +3,7 @@ import {
   GetProjectDto,
   GetOneProjectInput,
   CreateProjectInput,
-  // UpdateProjectInput,
-  // DeleteProjectInput,
+  UpdateProjectInput,
 } from './dto/projects.dto';
 import { ProjectsService } from './projects.service';
 
@@ -26,13 +25,8 @@ export class ProjectsResolver {
     return this.projectsService.create(input);
   }
 
-  // @Mutation(() => GetProjectDto)
-  // async updateProject(@Args('input') input: UpdateProjectInput) {
-  //   return this.projectsService.update(input);
-  // }
-
-  // @Mutation(() => GetProjectDto)
-  // async DeleteProject(@Args('input') input: DeleteProjectInput) {
-  //   return this.projectsService.remove(input.id);
-  // }
+  @Mutation(() => GetProjectDto)
+  async updateProject(@Args('input') input: UpdateProjectInput) {
+    return this.projectsService.update(input);
+  }
 }
