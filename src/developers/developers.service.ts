@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { Developer } from './entities/developers.entity';
 import { Knex } from 'knex';
 import { InjectConnection } from 'nest-knexjs';
@@ -11,14 +15,6 @@ import {
 @Injectable()
 export class DevelopersService {
   constructor(@InjectConnection() private readonly knex: Knex) {}
-  private counterId = 1;
-  private developers: Developer[] = [
-    {
-      id: 1,
-      name: 'Laurence Marcano',
-      email: 'laurencejose94@gmail.com',
-    },
-  ];
 
   async findAll() {
     const developers = await this.knex.table('developers');
@@ -33,38 +29,57 @@ export class DevelopersService {
     const developer = await this.knex.raw(query, [id]);
     console.log(developer.rows[0]);
     if (!developer) {
-      throw new NotFoundException(`Developer #${id} not found`);
+      throw new NotFoundException(`Developer with id ${id} not found`);
     }
     return developer.rows[0];
   }
 
-  create(data: CreateDeveloperInput) {
-    this.counterId = this.counterId + 1;
-    const newUser = {
-      id: this.counterId,
-      ...data,
-    };
-    this.developers.push(newUser);
-    return newUser;
+  async create(data: CreateDeveloperInput) {
+    const { name, email } = data;
+    const insert = await this.knex('developers')
+      .insert({
+        name,
+        email,
+      })
+      .returning('id')
+      .then((report) => {
+        return this.findOne(+report[0].id);
+      })
+      .catch((err) => {
+        console.log('Error registering Developer', err);
+        throw new BadRequestException(
+          `Error registering Developer: ${err.detail}`,
+        );
+      });
+
+    return insert;
   }
 
-  update(changes: UpdateDeveloperInput) {
-    const developer = this.findOne(changes.id);
-    const index = this.developers.findIndex((data) => data.id === changes.id);
-    this.developers[index] = {
-      ...developer,
+  async update(changes: UpdateDeveloperInput) {
+    const queryDev = `SELECT * FROM developers WHERE id = ?`;
+    const dataDev = await this.knex.raw(queryDev, [changes.id]);
+    const actualDataDev = dataDev.rows[0];
+    if (actualDataDev === undefined) {
+      throw new NotFoundException(`Developer with id ${changes.id} not found`);
+    }
+
+    const newDataRcords = {
+      ...actualDataDev,
       ...changes,
     };
-    return this.developers[index];
-  }
 
-  remove(id: number) {
-    const developer = this.findOne(id);
-    const index = this.developers.findIndex((data) => data.id === id);
-    if (index === -1) {
-      throw new NotFoundException(`Developer #${id} not found`);
-    }
-    this.developers.splice(index, 1);
-    return developer;
+    const query = `UPDATE public.developers SET name=?, email=? WHERE id = ?`;
+
+    await this.knex
+      .raw(query, [newDataRcords.name, newDataRcords.email, newDataRcords.id])
+      .then((report) => {
+        return this.findOne(newDataRcords.id);
+      })
+      .catch((err) => {
+        console.log('Error updating Developer', err);
+        throw new BadRequestException(
+          `Error updating Developer: ${err.detail}`,
+        );
+      });
   }
 }

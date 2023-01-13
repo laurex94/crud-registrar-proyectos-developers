@@ -50,7 +50,6 @@ type Mutation {
   DeleteProject(input: DeleteSpecialityInput!): SpecialitiesDto!
   createDeveloper(input: CreateDeveloperInput!): GetDeveloperDto!
   updateDeveloper(input: UpdateDeveloperInput!): GetDeveloperDto!
-  DeleteDeveloper(input: DeleteDeveloperInput!): GetDeveloperDto!
   createSpeciality(input: CreateSpecialityInput!): SpecialitiesDto!
 }
 
@@ -78,10 +77,6 @@ input UpdateDeveloperInput {
   id: Float!
   name: String!
   email: String!
-}
-
-input DeleteDeveloperInput {
-  id: Float!
 }
 
 input CreateSpecialityInput {

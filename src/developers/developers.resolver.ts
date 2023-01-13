@@ -39,9 +39,4 @@ export class DevelopersResolver {
   async updateDeveloper(@Args('input') input: UpdateDeveloperInput) {
     return this.developersService.update(input);
   }
-
-  @Mutation(() => GetDeveloperDto)
-  async DeleteDeveloper(@Args('input') input: DeleteDeveloperInput) {
-    return this.developersService.remove(input.id);
-  }
 }
