@@ -6,23 +6,14 @@ import {
 import { Knex } from 'knex';
 import { InjectConnection } from 'nest-knexjs';
 
-import { Speciality, listRoles } from './entities/specialities.entity';
 import {
   CreateSpecialityInput,
   UpdateSpecialityInput,
 } from './dto/specialities.dto';
-import { Console } from 'console';
 
 @Injectable()
 export class SpecialitiesService {
   constructor(@InjectConnection() private readonly knex: Knex) {}
-  private counterId = 1;
-  private roles: Speciality[] = [
-    {
-      id: 1,
-      name: listRoles.backend,
-    },
-  ];
 
   async findAll() {
     const specialities = await this.knex.table('specialities');

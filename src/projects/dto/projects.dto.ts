@@ -1,6 +1,5 @@
 import { IsString, IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { statusProject } from '../entities/projects.entity';
 
 @ObjectType()
 export class GetProjectDto {
@@ -19,7 +18,7 @@ export class GetProjectDto {
 
   @Field()
   @IsString()
-  readonly status: statusProject;
+  readonly status: string;
 }
 
 @InputType()
@@ -45,7 +44,7 @@ export class CreateProjectInput {
   @Field()
   @IsString()
   @IsNotEmpty()
-  readonly status: statusProject;
+  readonly idStatus: number;
 }
 
 @InputType()
@@ -56,24 +55,15 @@ export class UpdateProjectInput {
   @IsNotEmpty()
   readonly id: number;
 
-  @Field()
+  @Field({ nullable: true })
   @IsString()
   readonly name: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsString()
   readonly description: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsString()
-  readonly status: statusProject;
-}
-
-@InputType()
-export class DeleteProjectInput {
-  @Field()
-  @IsNumber()
-  @IsPositive()
-  @IsNotEmpty()
-  readonly id: number;
+  readonly idStatus: number;
 }

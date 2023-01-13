@@ -45,30 +45,10 @@ input GetOneSpecialityInput {
 }
 
 type Mutation {
-  createProject(input: CreateProjectInput!): GetProjectDto!
-  updateProject(input: UpdateProjectInput!): GetProjectDto!
-  DeleteProject(input: DeleteProjectInput!): GetProjectDto!
   createDeveloper(input: CreateDeveloperInput!): GetDeveloperDto!
   updateDeveloper(input: UpdateDeveloperInput!): GetDeveloperDto!
   createSpeciality(input: CreateSpecialityInput!): GetSpecialityDto!
   updateSpeciality(input: UpdateSpecialityInput!): GetSpecialityDto!
-}
-
-input CreateProjectInput {
-  name: String!
-  description: String!
-  status: String!
-}
-
-input UpdateProjectInput {
-  id: Float!
-  name: String!
-  description: String!
-  status: String!
-}
-
-input DeleteProjectInput {
-  id: Float!
 }
 
 input CreateDeveloperInput {
