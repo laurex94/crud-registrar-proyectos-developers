@@ -2,7 +2,7 @@ import { Query, Resolver, Mutation, Args } from '@nestjs/graphql';
 import {
   GetProjectDto,
   GetOneProjectInput,
-  // CreateProjectInput,
+  CreateProjectInput,
   // UpdateProjectInput,
   // DeleteProjectInput,
 } from './dto/projects.dto';
@@ -21,10 +21,10 @@ export class ProjectsResolver {
     return this.projectsService.findOne(input.id);
   }
 
-  // @Mutation(() => GetProjectDto)
-  // async createProject(@Args('input') input: CreateProjectInput) {
-  //   return this.projectsService.create(input);
-  // }
+  @Mutation(() => GetProjectDto)
+  async createProject(@Args('input') input: CreateProjectInput) {
+    return this.projectsService.create(input);
+  }
 
   // @Mutation(() => GetProjectDto)
   // async updateProject(@Args('input') input: UpdateProjectInput) {

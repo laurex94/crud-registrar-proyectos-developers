@@ -49,15 +49,27 @@ export class ProjectsService {
     return projects;
   }
 
-  // async create(data: CreateProjectInput) {
-  //   this.counterId = this.counterId + 1;
-  //   const newProject = {
-  //     id: this.counterId,
-  //     ...data,
-  //   };
-  //   this.projects.push(newProject);
-  //   return newProject;
-  // }
+  async create(data: CreateProjectInput) {
+    const { name, description, id_status } = data;
+    const insert = await this.knex('projects')
+      .insert({
+        name,
+        description,
+        id_status,
+      })
+      .returning('id')
+      .then((report) => {
+        return this.findOne(+report[0].id);
+      })
+      .catch((err) => {
+        console.log('Error registering Project', err);
+        throw new BadRequestException(
+          `Error registering Project: ${err.detail}`,
+        );
+      });
+
+    return insert;
+  }
 
   // async update(changes: UpdateProjectInput) {
   //   const project = this.findOne(changes.id);

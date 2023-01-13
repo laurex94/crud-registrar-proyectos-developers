@@ -42,9 +42,9 @@ export class CreateProjectInput {
   readonly description: string;
 
   @Field()
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  readonly idStatus: number;
+  readonly id_status: number;
 }
 
 @InputType()
