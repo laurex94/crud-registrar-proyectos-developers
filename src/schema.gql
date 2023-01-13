@@ -42,6 +42,7 @@ type Query {
   getAllDevelopers: [GetDeveloperDto!]!
   getDeveloperById(input: GetOneDeveloperInput!): GetDeveloperDto!
   findDevsByProjectId(input: GetOneDeveloperInput!): [findDevsByProjectIdOutput!]!
+  findDevsBySpecialityId(input: GetOneDeveloperInput!): [AddDeveloperSpecialityOutput!]!
   getAllSpecialites: [GetSpecialityDto!]!
   getSpecialityById(input: GetOneSpecialityInput!): GetSpecialityDto!
 }

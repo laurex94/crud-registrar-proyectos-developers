@@ -53,4 +53,9 @@ export class DevelopersResolver {
   async findDevsByProjectId(@Args('input') input: GetOneDeveloperInput) {
     return await this.developersService.findDevsByProjectId(input.id);
   }
+
+  @Query(() => [AddDeveloperSpecialityOutput])
+  async findDevsBySpecialityId(@Args('input') input: GetOneDeveloperInput) {
+    return await this.developersService.findDevsBySpecialityId(input.id);
+  }
 }
