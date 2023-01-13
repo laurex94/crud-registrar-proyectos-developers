@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Developer } from './entities/developers.entity';
+import { Knex } from 'knex';
+import { InjectConnection } from 'nest-knexjs';
 
 import {
   CreateDeveloperInput,
@@ -8,6 +10,7 @@ import {
 
 @Injectable()
 export class DevelopersService {
+  constructor(@InjectConnection() private readonly knex: Knex) {}
   private counterId = 1;
   private developers: Developer[] = [
     {
@@ -18,19 +21,21 @@ export class DevelopersService {
   ];
 
   async findAll() {
-    const developers = this.developers;
+    const developers = await this.knex.table('developers');
     if (!developers) {
-      throw new NotFoundException(`Developers not found`);
+      throw new NotFoundException(`developers not found`);
     }
     return developers;
   }
 
-  findOne(id: number) {
-    const developer = this.developers.find((data) => data.id === id);
+  async findOne(id: number) {
+    const query = `SELECT * from developers where id = ?`;
+    const developer = await this.knex.raw(query, [id]);
+    console.log(developer.rows[0]);
     if (!developer) {
       throw new NotFoundException(`Developer #${id} not found`);
     }
-    return developer;
+    return developer.rows[0];
   }
 
   create(data: CreateDeveloperInput) {

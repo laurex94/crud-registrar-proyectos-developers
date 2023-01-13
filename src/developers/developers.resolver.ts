@@ -22,7 +22,7 @@ export class DevelopersResolver {
 
   @Query(() => [GetDeveloperDto])
   async getAllDevelopers() {
-    return this.developersService.findAll();
+    return await this.developersService.findAll();
   }
 
   @Query(() => GetDeveloperDto)
