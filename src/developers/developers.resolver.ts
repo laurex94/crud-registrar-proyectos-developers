@@ -4,6 +4,8 @@ import {
   GetOneDeveloperInput,
   CreateDeveloperInput,
   UpdateDeveloperInput,
+  AddDeveloperSpecialityOutput,
+  AddDeveloperSpecialityInput,
 } from './dto/developers.dto';
 import { DevelopersService } from './developers.service';
 
@@ -37,5 +39,12 @@ export class DevelopersResolver {
   @Mutation(() => GetDeveloperDto)
   async updateDeveloper(@Args('input') input: UpdateDeveloperInput) {
     return await this.developersService.update(input);
+  }
+
+  @Mutation(() => AddDeveloperSpecialityOutput)
+  async AddDeveloperSpeciality(
+    @Args('input') input: AddDeveloperSpecialityInput,
+  ) {
+    return await this.developersService.AddDeveloperSpeciality(input);
   }
 }

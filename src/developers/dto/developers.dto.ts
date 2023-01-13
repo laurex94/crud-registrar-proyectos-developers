@@ -64,3 +64,52 @@ export class UpdateDeveloperInput {
   @IsOptional()
   readonly email: string;
 }
+
+@InputType()
+export class AddDeveloperSpecialityInput {
+  @Field()
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  readonly id_developer: number;
+
+  @Field()
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  readonly id_speciality: number;
+}
+
+@ObjectType()
+export class AddDeveloperSpecialityOutput {
+  @Field()
+  @IsString()
+  readonly developer: string;
+
+  @Field()
+  @IsString()
+  readonly email: string;
+
+  @Field()
+  @IsString()
+  readonly speciality: string;
+}
+
+@ObjectType()
+export class findDevsByProjectIdOutput {
+  @Field()
+  @IsString()
+  readonly developer: string;
+
+  @Field()
+  @IsString()
+  readonly email: string;
+
+  @Field()
+  @IsString()
+  readonly speciality: string;
+
+  @Field()
+  @IsString()
+  readonly project_associated: string;
+}
