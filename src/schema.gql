@@ -9,6 +9,11 @@ type GetProjectDto {
   status: String!
 }
 
+type AddProjectSpecialityOutput {
+  project: String!
+  speciality: String!
+}
+
 type GetDeveloperDto {
   id: Float!
   name: String!
@@ -62,6 +67,7 @@ input GetOneSpecialityInput {
 type Mutation {
   createProject(input: CreateProjectInput!): GetProjectDto!
   updateProject(input: UpdateProjectInput!): GetProjectDto!
+  AddProjectSpeciality(input: AddProjectSpecialityInput!): AddProjectSpecialityOutput!
   createDeveloper(input: CreateDeveloperInput!): GetDeveloperDto!
   updateDeveloper(input: UpdateDeveloperInput!): GetDeveloperDto!
   AddDeveloperSpeciality(input: AddDeveloperSpecialityInput!): AddDeveloperSpecialityOutput!
@@ -80,6 +86,11 @@ input UpdateProjectInput {
   name: String
   description: String
   id_status: Float
+}
+
+input AddProjectSpecialityInput {
+  id_project: Float!
+  id_speciality: Float!
 }
 
 input CreateDeveloperInput {

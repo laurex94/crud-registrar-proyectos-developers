@@ -6,7 +6,11 @@ import {
 import { Knex } from 'knex';
 import { InjectConnection } from 'nest-knexjs';
 
-import { CreateProjectInput, UpdateProjectInput } from './dto/projects.dto';
+import {
+  CreateProjectInput,
+  UpdateProjectInput,
+  AddProjectSpecialityInput,
+} from './dto/projects.dto';
 
 @Injectable()
 export class ProjectsService {
@@ -104,5 +108,56 @@ export class ProjectsService {
       });
 
     return newDataProj;
+  }
+
+  async findProjSpecId(id: number) {
+    const query = `SELECT p."name" as "project", s."name" as "speciality" 
+    FROM public.projects_need_specialities pns 
+      JOIN public.projects p ON pns.id_project = p.id 
+      join public.specialities s ON s.id = pns.id_speciality 
+      where pns.id = ?`;
+    const result = await this.knex
+      .raw(query, [id])
+      .then((report) => {
+        console.log(report.rows);
+        return report.rows[0];
+      })
+      .catch((err) => {
+        console.log('Error getting Projects', err);
+        throw new BadRequestException(`Error getting Projects : ${err.detail}`);
+      });
+
+    return result;
+  }
+
+  async AddProjectSpeciality(data: AddProjectSpecialityInput) {
+    const { id_project, id_speciality } = data;
+    const queryPr = `SELECT * FROM projects_need_specialities WHERE id_project = ? AND id_speciality = ?`;
+    const dataPr = await this.knex.raw(queryPr, [id_project, id_speciality]);
+    const actualDataDev = dataPr.rows[0];
+    if (actualDataDev !== undefined) {
+      throw new BadRequestException(
+        `Relation developer-speciality already exist`,
+      );
+    }
+
+    const insert = await this.knex('projects_need_specialities')
+      .insert({
+        id_project,
+        id_speciality,
+      })
+      .returning('id')
+      .then((report) => {
+        console.log('salida_insert', report);
+        return this.findProjSpecId(+report[0].id);
+      })
+      .catch((err) => {
+        console.log('Error registering relation developer-speciality', err);
+        throw new BadRequestException(
+          `Error registering relation developer-speciality: ${err.detail}`,
+        );
+      });
+
+    return insert;
   }
 }

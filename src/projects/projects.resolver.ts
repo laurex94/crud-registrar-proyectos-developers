@@ -4,6 +4,8 @@ import {
   GetOneProjectInput,
   CreateProjectInput,
   UpdateProjectInput,
+  AddProjectSpecialityOutput,
+  AddProjectSpecialityInput,
 } from './dto/projects.dto';
 import { ProjectsService } from './projects.service';
 
@@ -28,5 +30,10 @@ export class ProjectsResolver {
   @Mutation(() => GetProjectDto)
   async updateProject(@Args('input') input: UpdateProjectInput) {
     return this.projectsService.update(input);
+  }
+
+  @Mutation(() => AddProjectSpecialityOutput)
+  async AddProjectSpeciality(@Args('input') input: AddProjectSpecialityInput) {
+    return await this.projectsService.AddProjectSpeciality(input);
   }
 }

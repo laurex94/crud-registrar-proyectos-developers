@@ -75,3 +75,29 @@ export class UpdateProjectInput {
   @IsOptional()
   readonly id_status: number;
 }
+
+@InputType()
+export class AddProjectSpecialityInput {
+  @Field()
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  readonly id_project: number;
+
+  @Field()
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  readonly id_speciality: number;
+}
+
+@ObjectType()
+export class AddProjectSpecialityOutput {
+  @Field()
+  @IsString()
+  readonly project: string;
+
+  @Field()
+  @IsString()
+  readonly speciality: string;
+}
