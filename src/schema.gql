@@ -14,6 +14,13 @@ type AddProjectSpecialityOutput {
   speciality: String!
 }
 
+type findProjBySpecIdOutput {
+  project: String!
+  description: String!
+  status: String!
+  speciality: String!
+}
+
 type GetDeveloperDto {
   id: Float!
   name: String!
@@ -41,6 +48,7 @@ type GetSpecialityDto {
 type Query {
   getAllProjects: [GetProjectDto!]!
   getProjectById(input: GetOneProjectInput!): GetProjectDto!
+  findProjBySpecId(input: GetOneProjectInput!): [findProjBySpecIdOutput!]!
 
   """Hola developer, es lo que retorna"""
   hola_developer: String!

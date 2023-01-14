@@ -6,6 +6,7 @@ import {
   UpdateProjectInput,
   AddProjectSpecialityOutput,
   AddProjectSpecialityInput,
+  findProjBySpecIdOutput,
 } from './dto/projects.dto';
 import { ProjectsService } from './projects.service';
 
@@ -35,5 +36,10 @@ export class ProjectsResolver {
   @Mutation(() => AddProjectSpecialityOutput)
   async AddProjectSpeciality(@Args('input') input: AddProjectSpecialityInput) {
     return await this.projectsService.AddProjectSpeciality(input);
+  }
+
+  @Query(() => [findProjBySpecIdOutput])
+  async findProjBySpecId(@Args('input') input: GetOneProjectInput) {
+    return await this.projectsService.findProjBySpecId(input.id);
   }
 }

@@ -101,3 +101,22 @@ export class AddProjectSpecialityOutput {
   @IsString()
   readonly speciality: string;
 }
+
+@ObjectType()
+export class findProjBySpecIdOutput {
+  @Field()
+  @IsString()
+  readonly project: string;
+
+  @Field()
+  @IsString()
+  readonly description: string;
+
+  @Field()
+  @IsString()
+  readonly status: string;
+
+  @Field()
+  @IsString()
+  readonly speciality: string;
+}
