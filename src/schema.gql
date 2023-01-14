@@ -49,6 +49,7 @@ type Query {
   getAllProjects: [GetProjectDto!]!
   getProjectById(input: GetOneProjectInput!): GetProjectDto!
   findProjBySpecId(input: GetOneProjectInput!): [findProjBySpecIdOutput!]!
+  findProjByStatusId(input: GetOneProjectInput!): [findProjBySpecIdOutput!]!
 
   """Hola developer, es lo que retorna"""
   hola_developer: String!

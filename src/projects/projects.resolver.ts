@@ -42,4 +42,9 @@ export class ProjectsResolver {
   async findProjBySpecId(@Args('input') input: GetOneProjectInput) {
     return await this.projectsService.findProjBySpecId(input.id);
   }
+
+  @Query(() => [findProjBySpecIdOutput])
+  async findProjByStatusId(@Args('input') input: GetOneProjectInput) {
+    return await this.projectsService.findProjByStatusId(input.id);
+  }
 }

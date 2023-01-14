@@ -182,4 +182,26 @@ export class ProjectsService {
 
     return result;
   }
+
+  async findProjByStatusId(id: number) {
+    const query = `SELECT p."name" as "project", p.description as "description", sp."name" as status, s."name" "speciality"
+    FROM public.projects_need_specialities pns  
+      join public.projects p ON p.id = pns.id_project 
+      join public.status_projects sp on sp.id = p.id_status 
+      join public.specialities s on pns.id_speciality = s.id 
+      where p.id_status = ?
+    `;
+    const result = await this.knex
+      .raw(query, [id])
+      .then((report) => {
+        console.log(report.rows);
+        return report.rows;
+      })
+      .catch((err) => {
+        console.log('Error getting Projects', err);
+        throw new BadRequestException(`Error getting Projects : ${err.detail}`);
+      });
+
+    return result;
+  }
 }
