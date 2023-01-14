@@ -21,6 +21,11 @@ type findProjBySpecIdOutput {
   speciality: String!
 }
 
+type AddProjectDeveloperOutput {
+  project: String!
+  developer: String!
+}
+
 type GetDeveloperDto {
   id: Float!
   name: String!
@@ -77,6 +82,7 @@ type Mutation {
   createProject(input: CreateProjectInput!): GetProjectDto!
   updateProject(input: UpdateProjectInput!): GetProjectDto!
   AddProjectSpeciality(input: AddProjectSpecialityInput!): AddProjectSpecialityOutput!
+  AddProjectDeveloper(input: AddProjectDeveloperInput!): [AddProjectDeveloperOutput!]!
   createDeveloper(input: CreateDeveloperInput!): GetDeveloperDto!
   updateDeveloper(input: UpdateDeveloperInput!): GetDeveloperDto!
   AddDeveloperSpeciality(input: AddDeveloperSpecialityInput!): AddDeveloperSpecialityOutput!
@@ -100,6 +106,11 @@ input UpdateProjectInput {
 input AddProjectSpecialityInput {
   id_project: Float!
   id_speciality: Float!
+}
+
+input AddProjectDeveloperInput {
+  project_id: Float!
+  developer_id: Float!
 }
 
 input CreateDeveloperInput {

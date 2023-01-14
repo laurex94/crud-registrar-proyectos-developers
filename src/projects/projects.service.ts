@@ -10,6 +10,7 @@ import {
   CreateProjectInput,
   UpdateProjectInput,
   AddProjectSpecialityInput,
+  AddProjectDeveloperInput,
 } from './dto/projects.dto';
 
 @Injectable()
@@ -203,5 +204,62 @@ export class ProjectsService {
       });
 
     return result;
+  }
+
+  async findProjDevId(id: number) {
+    const query = `select p."name" as project, d."name" as developer
+    from public.projects_has_developers phd 
+    join public.developers d on d.id = phd.developer_id 
+    join public.projects p on p.id = phd.project_id 
+    where phd.id = ? limit 1`;
+    const result = await this.knex
+      .raw(query, [id])
+      .then((report) => {
+        console.log(report.rows);
+        return report.rows[0];
+      })
+      .catch((err) => {
+        console.log('Error getting Projects', err);
+        throw new BadRequestException(`Error getting Projects : ${err.detail}`);
+      });
+
+    return result;
+  }
+
+  async AddProjectDeveloper(data: AddProjectDeveloperInput) {
+    const { project_id, developer_id } = data;
+    const queryPr = `
+      with query_projects as (
+      select p.id id_project, pns.id_speciality id_speciality_needed from public.projects p join public.projects_need_specialities pns on p.id = pns.id_project where p.id = ?
+    ), query_developers as (
+      select d."name" developer, dhs.id_speciality id_speciality_offer from public.developers d join public.developer_has_specialities dhs on d.id = dhs.id_developer where d.id = ?
+    ) select * from query_projects where id_speciality_needed IN (select id_speciality_offer from query_developers)`;
+    const dataPr = await this.knex.raw(queryPr, [project_id, developer_id]);
+    const actualDataDev = dataPr.rows[0];
+    console.log('consulta_dev_proj', actualDataDev);
+    if (actualDataDev === undefined) {
+      throw new BadRequestException(
+        `The developer does not have the necessary specialties`,
+      );
+    }
+
+    const insert = await this.knex('projects_has_developers')
+      .insert({
+        project_id,
+        developer_id,
+      })
+      .returning('id')
+      .then((report) => {
+        console.log('salida_insert', report);
+        return this.findProjSpecId(+report[0].id);
+      })
+      .catch((err) => {
+        console.log('Error registering relation developer-speciality', err);
+        throw new BadRequestException(
+          `Error registering relation developer-speciality: ${err.detail}`,
+        );
+      });
+
+    return insert;
   }
 }

@@ -120,3 +120,29 @@ export class findProjBySpecIdOutput {
   @IsString()
   readonly speciality: string;
 }
+
+@InputType()
+export class AddProjectDeveloperInput {
+  @Field()
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  readonly project_id: number;
+
+  @Field()
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  readonly developer_id: number;
+}
+
+@ObjectType()
+export class AddProjectDeveloperOutput {
+  @Field()
+  @IsString()
+  readonly project: string;
+
+  @Field()
+  @IsString()
+  readonly developer: string;
+}

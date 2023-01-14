@@ -7,6 +7,8 @@ import {
   AddProjectSpecialityOutput,
   AddProjectSpecialityInput,
   findProjBySpecIdOutput,
+  AddProjectDeveloperInput,
+  AddProjectDeveloperOutput,
 } from './dto/projects.dto';
 import { ProjectsService } from './projects.service';
 
@@ -46,5 +48,10 @@ export class ProjectsResolver {
   @Query(() => [findProjBySpecIdOutput])
   async findProjByStatusId(@Args('input') input: GetOneProjectInput) {
     return await this.projectsService.findProjByStatusId(input.id);
+  }
+
+  @Mutation(() => [AddProjectDeveloperOutput])
+  async AddProjectDeveloper(@Args('input') input: AddProjectDeveloperInput) {
+    return await this.projectsService.AddProjectDeveloper(input);
   }
 }
