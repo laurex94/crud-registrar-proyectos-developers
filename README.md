@@ -1,38 +1,30 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# CRUD DEVELOPER-PROJECT
+## Descripción
 
-## Description
+Crea un CRUD en Typescript con GraphQL y NestJS que contenga los siguientes modelos y relaciones:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Proyecto: ID, nombre, descripción, status (Enum), tiene muchos devs, requiere ciertos Roles.
+- Developer: ID, nombre, email, puede trabajar en varios proyectos, tiene varios Roles
+- Especialidad: ID, Nombre
 
-## Installation
+## Funcionamiento:
+
+- El sistema debe validar los datos ingresados: Emails, textos en blanco, etc.
+- El usuario va a poder registrar distintas especialidades: Frontend, , Cloud Arquitech, UI, Tester, etc.
+- El usuario va a poder registrar varios proyectos.
+- El usuario va a poder relacionar varios devs a un proyecto, el sistema debe arrojar un error si el dev no tiene alguno de los roles requerido por el proyecto. Ej: Proyecto de Diseño de interfaces, tiene los roles Frontend y UI, un dev con el rol backend no puede ingresar al proyecto.
+- El usuario va a poder listar proyectos, pudiendo filtrar a su vez por Roles dentro del proyecto y por status. Ej: todos los proyectos que requieran el rol UI.
+- El usuario va a poder listar Devs, también pudiendo filtrar por Rol y además por proyecto.
+
+## Instalación
 
 ```bash
 $ npm install
 ```
 
-## Running the app
+## Corriendo la App
 
 ```bash
 # development
@@ -45,29 +37,171 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
+## Queries
 
 ```bash
-# unit tests
-$ npm run test
+# Obtener lista de desarroladores
+query {
+  getAllDevelopers {
+    id
+    name
+    email
+  }
+}
 
-# e2e tests
-$ npm run test:e2e
+# Obtener datos de desarrollador por id
+query{
+  getDeveloperById(input:{id:1}){
+    name
+  }
+}
 
-# test coverage
-$ npm run test:cov
+# Registrar desarrollador
+mutation{
+  createDeveloper(input:{name:"perensejo7",email:"perensejo7@gmail.com"}) {
+    id
+    name
+    email
+  }
+}
+
+# Actualizar datos de desarrollador
+mutation{
+  updateDeveloper(input:{id:5, name:"perensejo11",email:"perensejo1194@gmail.com"}) {
+    id
+    name
+    email
+  }
+}
+
+# Añadir relacion desarrollador-rol
+mutation{
+  AddDeveloperSpeciality(input:{id_developer:1, id_speciality:9}) {
+	developer
+    email
+    speciality
+  }
+}
+
+# Obtener lista de desarrolladores por id de proyecto
+query{
+  findDevsByProjectId(input:{id:1}){
+    developer
+  	email
+    speciality
+    project_associated
+  }
+}
+
+# Obtener lista de desarrolladores por id rol
+query{
+  findDevsBySpecialityId(input:{id:7}){
+    developer
+  	email
+    speciality
+  }
+}
+
+# Listar roles
+query {
+  getAllSpecialites {
+    id
+    name
+  }
+}
+
+# Obtener rol por id
+query{
+  getSpecialityById(input:{id:1}){
+    name
+  }
+}
+
+# Registrar rol
+mutation{
+  createSpeciality(input:{name:"Backend"}) {
+    id
+    name
+  }
+}
+
+# Actualizar datos de rol ya creado
+mutation{
+  updateSpeciality(input:{id:5, name:"perensejo11"}) {
+    id
+    name
+    email
+  }
+}
+
+# Listar proyectos
+query {
+  getAllProjects {
+    id
+    name
+    status
+  }
+}
+
+# Obtener proyecto por id
+query{
+  getProjectById(input:{id:1}){
+    id
+    name
+    description
+  }
+}
+
+# registrar proyecto
+mutation{
+  createProject(input:{name:"Proyecto 1", description:"descripcion 1", id_status: 1}) {
+    id
+    name
+  }
+}
+
+# Actualizar datos de proyecto
+mutation{
+  updateProject(input:{id:3, name:"proyecto 2"}) {
+    id
+    name
+  }
+}
+
+# Añadir roles necesarios a proyecto
+mutation{
+  AddProjectSpeciality(input:{id_project:1, id_speciality:8}) {
+		project
+    speciality
+  }
+}
+
+# Buscar proyectos por rol
+query{
+  findProjBySpecId(input:{id:7}){
+    project
+  	description
+    status
+    speciality
+  }
+}
+
+# Buscar proyecto por estatus
+query{
+  findProjByStatusId(input:{id:1}){
+    project
+  	description
+    status
+    speciality
+  }
+}
+
+# Añadir desarrollador a proyecto
+mutation{
+  AddProjectDeveloper(input:{project_id:1, developer_id:2}) {
+		project
+    developer
+  }
+}
+
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
